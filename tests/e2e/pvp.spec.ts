@@ -120,6 +120,50 @@ test('two players can play a full PvP penalty match', async ({
   ).toBeVisible({ timeout: 15_000 });
 });
 
+test('quick match finds an opponent and starts a PvP match', async ({
+  browser,
+  request,
+}) => {
+  test.setTimeout(120_000);
+  const health = await request.get(`${API_BASE}/health`).catch(() => null);
+  if (!health?.ok()) {
+    test.skip(true, 'backend unavailable');
+    return;
+  }
+
+  const playerA = await registerPlayer(request);
+  const playerB = await registerPlayer(request);
+  const pageA = await preparePage(browser, playerA.token, playerA.user);
+  const pageB = await preparePage(browser, playerB.token, playerB.user);
+
+  await pageA.goto('/app/competitions/quick-match');
+  await pageB.goto('/app/competitions/quick-match');
+
+  await Promise.all([
+    pageA.getByRole('button', { name: 'Найти соперника' }).click(),
+    pageB.getByRole('button', { name: 'Найти соперника' }).click(),
+  ]);
+
+  await expect(pageA).toHaveURL(/\/app\/competitions\/rooms\//, {
+    timeout: 20_000,
+  });
+  await expect(pageB).toHaveURL(/\/app\/competitions\/rooms\//, {
+    timeout: 20_000,
+  });
+  await expect(pageA.getByText('Выберите сектор удара')).toBeVisible({
+    timeout: 20_000,
+  });
+  await expect(pageB.getByText('Выберите сектор удара')).toBeVisible({
+    timeout: 20_000,
+  });
+
+  await pageA.getByRole('button', { name: 'Сектор 1' }).click();
+  await pageB.getByRole('button', { name: 'Сектор 1' }).click();
+  await expect(pageA.getByText('Раунд 2 из 5')).toBeVisible({
+    timeout: 15_000,
+  });
+});
+
 test('two players can play a full PvP quiz match', async ({
   browser,
   request,

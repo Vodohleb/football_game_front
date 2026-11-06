@@ -226,8 +226,8 @@ npm run e2e
   Higher or Lower, Tiki-Taka-Toe, создаёт состав и PvP-комнату.
 - `squad.spec.ts` создаёт состав, добавляет карточку на позицию, убирает её и
   меняет схему.
-- `pvp.spec.ts` играет полные PvP-матчи Penalty и Football Quiz между двумя
-  браузерными контекстами через WebSocket.
+- `pvp.spec.ts` проверяет Quick Match и играет полные PvP-матчи Penalty и
+  Football Quiz между двумя браузерными контекстами через WebSocket.
 - `admin.spec.ts` открывает все разделы админ-панели, проверяет ссылки на
   публичный профиль/транзакции и redirect обычного пользователя из `/admin`.
 - `profile.spec.ts` проверяет read-only профиль другого игрока, статистику и
