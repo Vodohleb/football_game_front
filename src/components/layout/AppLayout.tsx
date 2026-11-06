@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 
 import { Header } from '@/components/layout/Header';
 import { MobileDrawer } from '@/components/layout/MobileDrawer';
@@ -13,12 +13,17 @@ import { normalizeError } from '@/utils/errors';
 export function AppLayout() {
   const { error, isLoading } = useMe();
   const clear = useAuthStore((state) => state.clear);
+  const location = useLocation();
 
   useEffect(() => {
     if (error && normalizeError(error).status === 401) {
       clear();
     }
   }, [error, clear]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [location.pathname]);
 
   if (isLoading) {
     return <LoadingScreen label="Загружаем профиль..." fullscreen />;

@@ -37,8 +37,17 @@ export function HintGame({ gameCode, variant }: HintGameProps) {
   const [answer, setAnswer] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const debouncedAnswer = useDebouncedValue(answer, 300);
-  const { session, state, result, starting, acting, start, act, replay } =
-    useMiniGame(gameCode);
+  const {
+    session,
+    state,
+    result,
+    starting,
+    acting,
+    start,
+    act,
+    replay,
+    reset,
+  } = useMiniGame(gameCode);
 
   const { data: suggestions } = useQuery({
     queryKey: ['players', 'search', debouncedAnswer],
@@ -139,6 +148,7 @@ export function HintGame({ gameCode, variant }: HintGameProps) {
       backTo="/app/games"
       expiresAt={session.expiresAt}
       totalSeconds={session.timeLimitSeconds}
+      onExpire={reset}
       headerRight={
         <div className="flex items-center gap-2">
           <Badge variant="info">

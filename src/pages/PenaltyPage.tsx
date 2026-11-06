@@ -17,8 +17,17 @@ export default function PenaltyPage() {
   useDocumentTitle('Penalty Shootout');
   const meta = GAME_META.penalty;
   const [mode, setMode] = useState(meta.defaultMode);
-  const { session, state, result, starting, acting, start, act, replay } =
-    useMiniGame('penalty');
+  const {
+    session,
+    state,
+    result,
+    starting,
+    acting,
+    start,
+    act,
+    replay,
+    reset,
+  } = useMiniGame('penalty');
 
   if (!session) {
     return (
@@ -101,6 +110,7 @@ export default function PenaltyPage() {
       backTo="/app/games"
       expiresAt={session.expiresAt}
       totalSeconds={session.timeLimitSeconds}
+      onExpire={reset}
       headerRight={
         <div className="flex items-center gap-2">
           <Badge variant="success">{game?.mode ?? mode}</Badge>

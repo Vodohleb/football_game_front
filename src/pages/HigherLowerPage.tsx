@@ -22,8 +22,17 @@ export default function HigherLowerPage() {
   const [lastResponse, setLastResponse] = useState<GameActionResponse | null>(
     null,
   );
-  const { session, state, result, starting, acting, start, act, replay } =
-    useMiniGame('higher_lower');
+  const {
+    session,
+    state,
+    result,
+    starting,
+    acting,
+    start,
+    act,
+    replay,
+    reset,
+  } = useMiniGame('higher_lower');
 
   if (!session) {
     return (
@@ -110,6 +119,7 @@ export default function HigherLowerPage() {
       backTo="/app/games"
       expiresAt={session.expiresAt}
       totalSeconds={session.timeLimitSeconds}
+      onExpire={reset}
       headerRight={
         <div className="flex items-center gap-2">
           <Badge variant="success">

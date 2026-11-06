@@ -26,8 +26,17 @@ export default function DraftPage() {
   useDocumentTitle('Draft Challenge');
   const meta = GAME_META.draft;
   const [mode, setMode] = useState(meta.defaultMode);
-  const { session, state, result, starting, acting, start, act, replay } =
-    useMiniGame('draft');
+  const {
+    session,
+    state,
+    result,
+    starting,
+    acting,
+    start,
+    act,
+    replay,
+    reset,
+  } = useMiniGame('draft');
 
   if (!session) {
     return (
@@ -110,6 +119,7 @@ export default function DraftPage() {
       backTo="/app/games"
       expiresAt={session.expiresAt}
       totalSeconds={session.timeLimitSeconds}
+      onExpire={reset}
       headerRight={
         <div className="flex items-center gap-2">
           <Badge variant="success">{draft?.mode ?? mode}</Badge>

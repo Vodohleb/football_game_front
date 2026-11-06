@@ -31,8 +31,17 @@ export default function TikiTakaPage() {
   const [selectedCell, setSelectedCell] = useState<number | null>(null);
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebouncedValue(search, 300);
-  const { session, state, result, starting, acting, start, act, replay } =
-    useMiniGame('tiki_taka_toe');
+  const {
+    session,
+    state,
+    result,
+    starting,
+    acting,
+    start,
+    act,
+    replay,
+    reset,
+  } = useMiniGame('tiki_taka_toe');
 
   const { data: players, isFetching } = useQuery({
     queryKey: ['players', 'tiki-taka', debouncedSearch],
@@ -132,6 +141,7 @@ export default function TikiTakaPage() {
       backTo="/app/games"
       expiresAt={session.expiresAt}
       totalSeconds={session.timeLimitSeconds}
+      onExpire={reset}
       headerRight={
         <div className="flex items-center gap-2">
           <Badge variant="success">
