@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Search, Shield, UserRound } from 'lucide-react';
+import { ExternalLink, Search, Shield, UserRound } from 'lucide-react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
@@ -226,6 +227,22 @@ export default function AdminUsersPage() {
               Блокировка аккаунта запрещает авторизацию. Все административные
               изменения фиксируются в audit-логе.
             </div>
+            <Link
+              to={`/app/users/${selected.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between gap-2 rounded-xl border border-border bg-bg-secondary px-3 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:border-accent-primary/40"
+            >
+              Открыть публичный профиль
+              <ExternalLink className="h-4 w-4 text-text-muted" />
+            </Link>
+            <Link
+              to={`/admin/economy?user_id=${selected.id}`}
+              className="flex items-center justify-between gap-2 rounded-xl border border-border bg-bg-secondary px-3 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:border-accent-primary/40"
+            >
+              Транзакции пользователя
+              <ExternalLink className="h-4 w-4 text-text-muted" />
+            </Link>
           </div>
         )}
       </Modal>

@@ -431,7 +431,7 @@ export default function ProfilePage() {
                       Win rate
                     </p>
                     <p className="font-display text-2xl font-extrabold text-blue">
-                      {Math.round(statistics.overall.win_rate * 100)}%
+                      {Math.round(statistics.overall.win_rate)}%
                     </p>
                   </div>
                   <div>

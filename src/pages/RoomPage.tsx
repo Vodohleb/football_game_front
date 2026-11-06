@@ -765,6 +765,14 @@ export default function RoomPage() {
                       Победитель
                     </Badge>
                   )}
+                  {player.user_id !== user?.id && (
+                    <Link
+                      to={`/app/users/${player.user_id}`}
+                      className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-accent-primary hover:underline"
+                    >
+                      Открыть профиль
+                    </Link>
+                  )}
                 </div>
               ))}
             </div>

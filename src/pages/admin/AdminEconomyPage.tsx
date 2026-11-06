@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowDownLeft, ArrowUpRight, Coins, Search, Wallet } from 'lucide-react';
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -18,9 +19,11 @@ import { formatDateTime, formatNumber, titleCase } from '@/utils/format';
 export default function AdminEconomyPage() {
   useDocumentTitle('Администрирование: экономика');
   const queryClient = useQueryClient();
+  const [searchParams] = useSearchParams();
+  const urlUserId = searchParams.get('user_id') ?? '';
   const [page, setPage] = useState(1);
-  const [filterUserId, setFilterUserId] = useState('');
-  const [appliedUserId, setAppliedUserId] = useState('');
+  const [filterUserId, setFilterUserId] = useState(urlUserId);
+  const [appliedUserId, setAppliedUserId] = useState(urlUserId);
   const [adjustUserId, setAdjustUserId] = useState('');
   const [amount, setAmount] = useState('');
   const [reason, setReason] = useState('');

@@ -123,7 +123,7 @@ export default function LeaderboardPage() {
           {entry.wins}W / {entry.losses}L
         </span>
         <span className="hidden text-center text-xs text-text-secondary sm:block">
-          {Math.round(entry.win_rate * 100)}%
+          {Math.round(entry.win_rate)}%
         </span>
         <span className="text-right font-display text-base font-extrabold text-blue">
           {formatNumber(entry.rating)}

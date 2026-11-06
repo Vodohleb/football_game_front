@@ -38,6 +38,7 @@ const LeaderboardPage = lazy(() => import('@/pages/LeaderboardPage'));
 const QuestsPage = lazy(() => import('@/pages/QuestsPage'));
 const AchievementsPage = lazy(() => import('@/pages/AchievementsPage'));
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
+const PublicProfilePage = lazy(() => import('@/pages/PublicProfilePage'));
 
 const AdminDashboardPage = lazy(() => import('@/pages/admin/AdminDashboardPage'));
 const AdminUsersPage = lazy(() => import('@/pages/admin/AdminUsersPage'));
@@ -117,6 +118,7 @@ export const router = createBrowserRouter([
           { path: 'quests', element: withSuspense(<QuestsPage />) },
           { path: 'achievements', element: withSuspense(<AchievementsPage />) },
           { path: 'profile', element: withSuspense(<ProfilePage />) },
+          { path: 'users/:userId', element: withSuspense(<PublicProfilePage />) },
         ],
       },
     ],

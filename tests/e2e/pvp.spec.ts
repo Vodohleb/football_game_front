@@ -106,4 +106,12 @@ test('two players can play a full PvP penalty match', async ({
   await expect(
     pageB.getByRole('heading', { name: 'Матч завершён' }),
   ).toBeVisible({ timeout: 15_000 });
+
+  await expect(
+    pageA.getByRole('link', { name: 'Открыть профиль' }).first(),
+  ).toBeVisible();
+  await pageA.getByRole('link', { name: 'Открыть профиль' }).first().click();
+  await expect(
+    pageA.getByText('Публичный профиль', { exact: true }),
+  ).toBeVisible({ timeout: 15_000 });
 });
