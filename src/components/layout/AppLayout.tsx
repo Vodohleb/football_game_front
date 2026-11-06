@@ -7,6 +7,7 @@ import { Header } from '@/components/layout/Header';
 import { MobileDrawer } from '@/components/layout/MobileDrawer';
 import { MobileNav } from '@/components/layout/MobileNav';
 import { SidebarNav } from '@/components/layout/SidebarNav';
+import { AchievementWatcher } from '@/components/feedback/AchievementWatcher';
 import { LoadingScreen } from '@/components/feedback/LoadingScreen';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
@@ -69,6 +70,7 @@ export function AppLayout() {
       </div>
       <MobileNav />
       <MobileDrawer />
+      <AchievementWatcher />
 
       <Modal
         open={levelUp !== null}
