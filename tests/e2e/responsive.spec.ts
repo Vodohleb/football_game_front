@@ -12,9 +12,9 @@ const VIEWPORTS = [
   { width: 1920, height: 1080 },
 ];
 
+const PUBLIC_ROUTES = ['/', '/login', '/register', '/forgot-password'];
+
 const ROUTES = [
-  '/',
-  '/login',
   '/app/dashboard',
   '/app/games',
   '/app/games/draft',
@@ -148,6 +148,29 @@ test('no horizontal overflow on key screens at all target viewports', async ({
         `${route} overflows at ${viewport.width}x${viewport.height}: ${JSON.stringify(
           result.offenders,
         )}`,
+      ).toBeLessThanOrEqual(1);
+    }
+  }
+});
+
+test('public pages have no horizontal overflow', async ({ page }) => {
+  test.setTimeout(180_000);
+  for (const viewport of VIEWPORTS) {
+    await page.setViewportSize(viewport);
+    for (const route of PUBLIC_ROUTES) {
+      await page.goto(route);
+      await page.waitForTimeout(350);
+      const overflow = await page.evaluate(() => {
+        const viewportWidth = document.documentElement.clientWidth;
+        const scrollWidth = Math.max(
+          document.documentElement.scrollWidth,
+          document.body.scrollWidth,
+        );
+        return scrollWidth - viewportWidth;
+      });
+      expect(
+        overflow,
+        `${route} overflows at ${viewport.width}x${viewport.height}`,
       ).toBeLessThanOrEqual(1);
     }
   }

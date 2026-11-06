@@ -31,7 +31,10 @@ import { userService } from '@/services/userService';
 import { useMe } from '@/hooks/useMe';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { GAME_META, GAME_ORDER } from '@/constants/games';
-import { useUserStore } from '@/stores/userStore';
+import {
+  EMPTY_MATCH_HISTORY,
+  useUserStore,
+} from '@/stores/userStore';
 import { formatDate, formatNumber, formatPercent, titleCase } from '@/utils/format';
 import { leagueForRating } from '@/utils/league';
 
@@ -97,7 +100,7 @@ export default function DashboardPage() {
   const username = me?.profile?.display_name ?? me?.user.username ?? 'Player';
   const profile = me?.profile;
   const localHistory = useUserStore((state) =>
-    userId ? state.history[userId] ?? [] : [],
+    userId ? state.history[userId] ?? EMPTY_MATCH_HISTORY : EMPTY_MATCH_HISTORY,
   );
   const recentResults = localHistory.slice(0, 3);
   const league = leagueForRating(myRating?.global_rating);

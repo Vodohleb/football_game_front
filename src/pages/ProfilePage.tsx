@@ -36,7 +36,10 @@ import { ratingService } from '@/services/ratingService';
 import { userService } from '@/services/userService';
 import { useAuthStore } from '@/stores/authStore';
 import { notify } from '@/stores/notificationStore';
-import { useUserStore } from '@/stores/userStore';
+import {
+  EMPTY_MATCH_HISTORY,
+  useUserStore,
+} from '@/stores/userStore';
 import { useWalletStore } from '@/stores/walletStore';
 import type { UserSettings } from '@/types/api';
 import { cn } from '@/utils/cn';
@@ -67,7 +70,7 @@ export default function ProfilePage() {
 
   const userId = me?.user.id;
   const localHistory = useUserStore((state) =>
-    userId ? state.history[userId] ?? [] : [],
+    userId ? state.history[userId] ?? EMPTY_MATCH_HISTORY : EMPTY_MATCH_HISTORY,
   );
 
   const statisticsQuery = useQuery({

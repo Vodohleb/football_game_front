@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
+export const EMPTY_MATCH_HISTORY: LocalMatchHistoryEntry[] = [];
+
 export interface LocalMatchHistoryEntry {
   id: string;
   gameCode: string;
