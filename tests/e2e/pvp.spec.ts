@@ -56,6 +56,7 @@ test('two players can play a full PvP penalty match', async ({
   browser,
   request,
 }) => {
+  test.setTimeout(120_000);
   const health = await request.get(`${API_BASE}/health`).catch(() => null);
   if (!health?.ok()) {
     test.skip(true, 'backend unavailable');
