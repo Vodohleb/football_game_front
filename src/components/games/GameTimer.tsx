@@ -1,4 +1,5 @@
 import { Clock } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 
 import { useCountdown } from '@/hooks/useCountdown';
 import { cn } from '@/utils/cn';
@@ -26,9 +27,17 @@ export function GameTimer({
       ? Math.max(0, Math.min(100, (secondsLeft / totalSeconds) * 100))
       : null;
 
-  if (expired && onExpire) {
-    onExpire();
-  }
+  const notified = useRef(false);
+  useEffect(() => {
+    if (!expired) {
+      notified.current = false;
+      return;
+    }
+    if (onExpire && !notified.current) {
+      notified.current = true;
+      onExpire();
+    }
+  }, [expired, onExpire]);
 
   return (
     <div

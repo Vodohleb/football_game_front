@@ -77,7 +77,7 @@ function StatRow({
   compact,
 }: {
   label: string;
-  value: number;
+  value: number | null | undefined;
   highlighted?: boolean;
   compact?: boolean;
 }) {
@@ -92,7 +92,7 @@ function StatRow({
           highlighted && 'text-gold',
         )}
       >
-        {value}
+        {value === null || value === undefined ? '?' : value}
       </span>
     </div>
   );
