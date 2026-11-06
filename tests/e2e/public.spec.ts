@@ -24,3 +24,18 @@ test('unknown route renders the 404 page', async ({ page }) => {
 
   await expect(page.getByText('Такой страницы нет')).toBeVisible();
 });
+
+test('offline banner appears when the connection is lost', async ({
+  page,
+  context,
+}) => {
+  await page.goto('/');
+  await context.setOffline(true);
+  await expect(page.getByRole('status')).toContainText(
+    'Нет подключения к интернету',
+    { timeout: 10_000 },
+  );
+
+  await context.setOffline(false);
+  await expect(page.getByRole('status')).toHaveCount(0, { timeout: 10_000 });
+});

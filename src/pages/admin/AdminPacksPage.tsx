@@ -282,6 +282,38 @@ export default function AdminPacksPage() {
             />
           </div>
 
+          <div className="rounded-2xl border border-border bg-gradient-to-br from-blue-500/15 via-bg-card to-bg-card p-4">
+            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-text-muted">
+              Предпросмотр пака
+            </p>
+            <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex min-w-0 items-center gap-3">
+                <span className="flex h-16 w-12 shrink-0 flex-col items-center justify-center rounded-lg border border-white/15 bg-black/20">
+                  <PackageOpen className="h-6 w-6 text-accent-primary" />
+                  <span className="text-[9px] font-bold text-white/60">
+                    {form.cards_count || 1}
+                  </span>
+                </span>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-bold text-text-primary">
+                    {form.name || 'Новый пак'}
+                  </p>
+                  <p className="truncate text-xs text-text-muted">
+                    {form.description || 'Без описания'}
+                  </p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-bold text-gold">
+                  {form.price || 0} монет
+                </p>
+                <p className="text-[10px] text-text-muted">
+                  Сумма вероятностей: {probabilitySum}%
+                </p>
+              </div>
+            </div>
+          </div>
+
           <div>
             <div className="mb-2 flex items-center justify-between">
               <p className="text-sm font-semibold text-text-primary">

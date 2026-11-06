@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 
+import { PlayerCard } from '@/components/cards/PlayerCard';
 import { GameResultPanel } from '@/components/games/GameResultPanel';
 import { GameShell } from '@/components/games/GameShell';
 import { GameStartCard } from '@/components/games/GameStartCard';
@@ -57,6 +58,17 @@ export function HintGame({ gameCode, variant }: HintGameProps) {
     staleTime: 60_000,
   });
 
+  const answerPlayerId = result
+    ? String(result.result_data.player_id ?? '')
+    : '';
+  const { data: answerCards } = useQuery({
+    queryKey: ['players', answerPlayerId, 'cards'],
+    queryFn: () => playerService.cards(answerPlayerId),
+    enabled: Boolean(result && answerPlayerId),
+    staleTime: 60_000,
+  });
+  const answerCard = answerCards?.[0];
+
   if (!session) {
     return (
       <GameStartCard
@@ -99,18 +111,31 @@ export function HintGame({ gameCode, variant }: HintGameProps) {
           onReplay={() => replay(game?.mode ?? mode)}
           replayLoading={starting}
         >
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <p className="text-xs uppercase tracking-wide text-text-muted">
-                Загаданный футболист
-              </p>
-              <p className="mt-1 text-lg font-bold text-accent-primary">
-                {answerName}
-              </p>
-            </div>
-            <div className="text-right text-xs text-text-secondary">
-              <p>Подсказок открыто: {game?.hints_revealed ?? '—'}</p>
-              <p>Попыток использовано: {game?.attempts ?? 0}</p>
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
+            {answerCard && (
+              <div className="w-40 shrink-0">
+                <PlayerCard card={answerCard} size="sm" />
+              </div>
+            )}
+            <div className="flex flex-1 flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="text-xs uppercase tracking-wide text-text-muted">
+                  Загаданный футболист
+                </p>
+                <p className="mt-1 text-lg font-bold text-accent-primary">
+                  {answerName}
+                </p>
+                {answerCard && (
+                  <p className="mt-1 text-xs text-text-secondary">
+                    {answerCard.position} · {answerCard.club} · OVR{' '}
+                    {answerCard.overall_rating}
+                  </p>
+                )}
+              </div>
+              <div className="text-right text-xs text-text-secondary">
+                <p>Подсказок открыто: {game?.hints_revealed ?? '—'}</p>
+                <p>Попыток использовано: {game?.attempts ?? 0}</p>
+              </div>
             </div>
           </div>
         </GameResultPanel>

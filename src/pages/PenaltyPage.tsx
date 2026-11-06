@@ -225,13 +225,23 @@ export default function PenaltyPage() {
                   >
                     <Crosshair className="h-6 w-6 text-white/10 transition-colors group-hover:text-accent-primary/60" />
                     {selected && (
-                      <span className="absolute inset-0 flex items-center justify-center">
+                      <motion.span
+                        key={`shot-${lastShot?.shot ?? 0}`}
+                        initial={{ scale: 0.3, y: 26, opacity: 0 }}
+                        animate={{ scale: 1, y: 0, opacity: 1 }}
+                        transition={{
+                          type: 'spring',
+                          stiffness: 320,
+                          damping: 18,
+                        }}
+                        className="absolute inset-0 flex items-center justify-center"
+                      >
                         {goal ? (
                           <Goal className="h-8 w-8 text-accent-primary drop-shadow" />
                         ) : (
                           <Shield className="h-8 w-8 text-red drop-shadow" />
                         )}
-                      </span>
+                      </motion.span>
                     )}
                     {keeper && (
                       <span className="absolute bottom-1.5 right-1.5 rounded bg-blue/20 px-1.5 py-0.5 text-[9px] font-bold text-blue">
