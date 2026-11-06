@@ -13,6 +13,7 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { Tabs } from '@/components/ui/Tabs';
 import { GAME_META, GAME_ORDER } from '@/constants/games';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
+import { useMe } from '@/hooks/useMe';
 import { ratingService } from '@/services/ratingService';
 import { useAuthStore } from '@/stores/authStore';
 import type { LeaderboardEntry, WeeklyLeaderboardEntry } from '@/types/api';
@@ -34,6 +35,7 @@ export default function LeaderboardPage() {
     queryFn: ratingService.me,
     staleTime: 60_000,
   });
+  const { data: me } = useMe();
 
   const globalQuery = useQuery({
     queryKey: ['leaderboard', 'global', page],
@@ -69,6 +71,36 @@ export default function LeaderboardPage() {
   const isError = activeQuery.isError;
   const error = activeQuery.error;
   const refetch = activeQuery.refetch;
+  const myLevel = me?.profile?.level ?? 1;
+  const gameRating = myRating?.games.find(
+    (game) => game.game_code === gameCode,
+  );
+  const selfVisible = entries.some(
+    (entry) => 'username' in entry && entry.username === username,
+  );
+  const selfRank =
+    tab === 'weekly'
+      ? myRating?.weekly_rank
+      : tab === 'games'
+        ? gameRating?.rank
+        : tab === 'season'
+          ? myRating?.season_rank
+          : myRating?.global_rank;
+  const selfRating =
+    tab === 'weekly'
+      ? myRating?.weekly_delta ?? 0
+      : tab === 'games'
+        ? gameRating?.rating ?? null
+        : myRating?.global_rating ?? null;
+  const selfMatches =
+    tab === 'games' ? gameRating?.matches_played ?? 0 : myRating?.matches_played ?? 0;
+  const selfWins =
+    tab === 'games' ? gameRating?.wins ?? 0 : myRating?.wins ?? 0;
+  const selfLosses =
+    tab === 'games' ? gameRating?.losses ?? 0 : myRating?.losses ?? 0;
+  const selfLeague = leagueForRating(
+    typeof selfRating === 'number' ? selfRating : myRating?.global_rating,
+  );
 
   const changeTab = (value: TabValue) => {
     setTab(value);
@@ -269,6 +301,56 @@ export default function LeaderboardPage() {
             Матчей: {myRating.matches_played} · побед: {myRating.wins} · поражений:{' '}
             {myRating.losses}
           </span>
+        </div>
+      )}
+
+      {!isLoading && !isError && myRating && username && !selfVisible && (
+        <div className="rounded-2xl border border-accent-primary/40 bg-accent-primary/10 p-3">
+          <div className="mb-1.5 flex items-center justify-between">
+            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-accent-primary">
+              Ваша позиция
+            </p>
+            <Badge variant="success" dot>
+              Вы
+            </Badge>
+          </div>
+          <div className="grid grid-cols-[40px_1fr_auto] items-center gap-2">
+            <span className="text-center font-display text-sm font-extrabold text-accent-primary">
+              #{selfRank ?? '—'}
+            </span>
+            <div className="flex min-w-0 items-center gap-2.5">
+              <Avatar name={username} size="sm" />
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold text-text-primary">
+                  {username}
+                </p>
+                <p className="text-[10px] text-text-muted">
+                  LVL {myLevel} · {selfLeague.name} · {selfMatches} матчей ·{' '}
+                  {selfWins}W / {selfLosses}L
+                </p>
+              </div>
+            </div>
+            <div className="text-right">
+              {tab === 'weekly' ? (
+                <span
+                  className={cn(
+                    'text-sm font-bold',
+                    (selfRating ?? 0) >= 0 ? 'text-accent-primary' : 'text-red',
+                  )}
+                >
+                  {(selfRating ?? 0) >= 0 ? '+' : ''}
+                  {selfRating ?? 0}
+                </span>
+              ) : (
+                <span className="text-sm font-extrabold text-blue">
+                  {formatNumber(selfRating)}
+                </span>
+              )}
+              <p className="text-[10px] text-text-muted">
+                {tab === 'weekly' ? 'weekly Δ' : 'rating'}
+              </p>
+            </div>
+          </div>
         </div>
       )}
 

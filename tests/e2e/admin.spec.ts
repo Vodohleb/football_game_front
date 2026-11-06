@@ -61,7 +61,22 @@ test('admin can open every administration section', async ({ page, request }) =>
   await expect(page.getByText('Пользователи')).toBeVisible();
   await page.getByRole('button', { name: 'Открыть' }).first().click();
   await expect(page.getByRole('dialog')).toBeVisible();
-  await page.keyboard.press('Escape');
+
+  const [profileTab] = await Promise.all([
+    page.context().waitForEvent('page'),
+    page
+      .getByRole('link', { name: 'Открыть публичный профиль' })
+      .click(),
+  ]);
+  await profileTab.waitForLoadState('domcontentloaded');
+  await expect(
+    profileTab.getByText('Публичный профиль', { exact: true }),
+  ).toBeVisible({ timeout: 15_000 });
+  await profileTab.close();
+
+  await page.getByRole('link', { name: 'Транзакции пользователя' }).click();
+  await expect(page).toHaveURL(/\/admin\/economy\?user_id=/);
+  await expect(page.getByPlaceholder('Фильтр по user_id')).not.toHaveValue('');
 
   await page.goto('/admin/packs');
   await page.getByRole('button', { name: 'Редактировать' }).first().click();

@@ -28,6 +28,7 @@ export default function DraftPage() {
   useDocumentTitle('Draft Challenge');
   const meta = GAME_META.draft;
   const [mode, setMode] = useState(meta.defaultMode);
+  const [pendingCardId, setPendingCardId] = useState<string | null>(null);
   const {
     session,
     state,
@@ -268,9 +269,17 @@ export default function DraftPage() {
                 <PlayerCard
                   card={option}
                   size="sm"
-                  disabled={acting || draft?.finished}
+                  selected={pendingCardId === option.card_id}
+                  disabled={
+                    acting || Boolean(draft?.finished) || pendingCardId !== null
+                  }
                   onClick={async () => {
+                    setPendingCardId(option.card_id);
+                    await new Promise((resolve) =>
+                      window.setTimeout(resolve, 180),
+                    );
                     await act('pick', { card_id: option.card_id });
+                    setPendingCardId(null);
                   }}
                 />
               </motion.div>
