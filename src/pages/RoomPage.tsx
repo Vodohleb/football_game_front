@@ -655,6 +655,7 @@ export default function RoomPage() {
                         <button
                           key={`${option}-${index}`}
                           type="button"
+                          data-testid="pvp-quiz-option"
                           disabled={hasSubmitted}
                           onClick={() => send({ option: index })}
                           className="flex items-center gap-3 rounded-xl border border-border bg-bg-card px-4 py-3 text-left text-sm text-text-primary transition-colors hover:border-accent-primary/50 hover:bg-bg-hover disabled:cursor-not-allowed disabled:opacity-40"

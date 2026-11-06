@@ -119,3 +119,60 @@ test('two players can play a full PvP penalty match', async ({
     pageA.getByText('Публичный профиль', { exact: true }),
   ).toBeVisible({ timeout: 15_000 });
 });
+
+test('two players can play a full PvP quiz match', async ({
+  browser,
+  request,
+}) => {
+  test.setTimeout(180_000);
+  const health = await request.get(`${API_BASE}/health`).catch(() => null);
+  if (!health?.ok()) {
+    test.skip(true, 'backend unavailable');
+    return;
+  }
+
+  const playerA = await registerPlayer(request);
+  const playerB = await registerPlayer(request);
+  const pageA = await preparePage(browser, playerA.token, playerA.user);
+  const pageB = await preparePage(browser, playerB.token, playerB.user);
+
+  await pageA.goto('/app/competitions/rooms');
+  await pageA
+    .getByRole('button', { name: /Football Quiz PvP/ })
+    .click();
+  await pageA.getByRole('button', { name: 'Создать комнату' }).click();
+  await expect(pageA.getByText('Игроки')).toBeVisible({ timeout: 15_000 });
+  const code = (
+    await pageA.getByTitle('Скопировать код').innerText()
+  ).trim();
+  expect(code.length).toBeGreaterThanOrEqual(4);
+
+  await pageB.goto('/app/competitions/rooms');
+  await pageB.getByPlaceholder('Например, A1B2C3').fill(code);
+  await pageB.getByRole('button', { name: 'Подключиться к комнате' }).click();
+  await expect(pageB.getByText('Игроки')).toBeVisible({ timeout: 15_000 });
+
+  await pageA.getByRole('button', { name: 'Готов', exact: true }).click();
+  await pageB.getByRole('button', { name: 'Готов', exact: true }).click();
+
+  await expect(pageA.getByText(/Вопрос 1 из 5/)).toBeVisible({
+    timeout: 15_000,
+  });
+  await expect(pageB.getByText(/Вопрос 1 из 5/)).toBeVisible({
+    timeout: 15_000,
+  });
+
+  for (let round = 0; round < 5; round += 1) {
+    await expect(pageA.getByText(/Вопрос \d+ из 5/)).toBeVisible();
+    await pageA.getByTestId('pvp-quiz-option').first().click();
+    await pageB.getByTestId('pvp-quiz-option').first().click();
+    await pageA.waitForTimeout(1200);
+  }
+
+  await expect(
+    pageA.getByRole('heading', { name: 'Матч завершён' }),
+  ).toBeVisible({ timeout: 15_000 });
+  await expect(
+    pageB.getByRole('heading', { name: 'Матч завершён' }),
+  ).toBeVisible({ timeout: 15_000 });
+});
