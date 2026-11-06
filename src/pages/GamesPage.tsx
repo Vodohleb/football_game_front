@@ -19,13 +19,16 @@ import {
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { gameService } from '@/services/gameService';
 import { ratingService } from '@/services/ratingService';
-import { useUserStore } from '@/stores/userStore';
+import { useAuthStore } from '@/stores/authStore';
+import { bestScoreKey, useUserStore } from '@/stores/userStore';
 import { formatNumber } from '@/utils/format';
 
 export default function GamesPage() {
   useDocumentTitle('Мини-игры');
   const [category, setCategory] = useState<GameCategory>('all');
   const recentGameCodes = useUserStore((state) => state.recentGameCodes);
+  const bestScores = useUserStore((state) => state.bestScores);
+  const userId = useAuthStore((state) => state.user?.id);
 
   const { data: games, isLoading } = useQuery({
     queryKey: ['games'],
@@ -113,6 +116,9 @@ export default function GamesPage() {
             const rating = myRating?.games.find(
               (game) => game.game_code === code,
             );
+            const best = userId
+              ? bestScores[bestScoreKey(userId, code)]
+              : undefined;
             return (
               <motion.div
                 key={code}
@@ -146,7 +152,7 @@ export default function GamesPage() {
                   {meta.description}
                 </p>
 
-                <div className="mt-4 grid grid-cols-2 gap-2 border-t border-white/10 pt-3">
+                <div className="mt-4 grid grid-cols-3 gap-2 border-t border-white/10 pt-3">
                   <div>
                     <p className="text-[10px] uppercase tracking-wide text-text-muted">
                       Рейтинг
@@ -161,6 +167,14 @@ export default function GamesPage() {
                     </p>
                     <p className="text-sm font-bold text-text-primary">
                       {rating?.matches_played ?? 0}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] uppercase tracking-wide text-text-muted">
+                      Рекорд
+                    </p>
+                    <p className="text-sm font-bold text-gold">
+                      {best === undefined ? '—' : formatNumber(best)}
                     </p>
                   </div>
                 </div>

@@ -1,9 +1,19 @@
 import { motion } from 'framer-motion';
-import { Clock, Coins, Home, RotateCcw, Star, Zap } from 'lucide-react';
+import {
+  Clock,
+  Coins,
+  Home,
+  RotateCcw,
+  Star,
+  Trophy,
+  Zap,
+} from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components/ui/Button';
+import { useAuthStore } from '@/stores/authStore';
+import { bestScoreKey, useUserStore } from '@/stores/userStore';
 import type { GameResult } from '@/types/api';
 import { formatNumber } from '@/utils/format';
 
@@ -23,6 +33,12 @@ export function GameResultPanel({
   children,
 }: GameResultPanelProps) {
   const navigate = useNavigate();
+  const userId = useAuthStore((state) => state.user?.id);
+  const bestScore = useUserStore((state) =>
+    userId
+      ? state.bestScores[bestScoreKey(userId, result.game_code)]
+      : undefined,
+  );
 
   return (
     <motion.div
@@ -54,7 +70,7 @@ export function GameResultPanel({
         </div>
       </div>
 
-      <div className="grid grid-cols-3 divide-x divide-border border-b border-border">
+      <div className="grid grid-cols-2 divide-x divide-border border-b border-border sm:grid-cols-4">
         <div className="px-2 py-4 text-center">
           <Coins className="mx-auto mb-1 h-5 w-5 text-gold" />
           <p className="text-lg font-bold text-text-primary">
@@ -80,6 +96,15 @@ export function GameResultPanel({
           </p>
           <p className="text-[10px] uppercase tracking-wide text-text-muted">
             Время
+          </p>
+        </div>
+        <div className="px-2 py-4 text-center">
+          <Trophy className="mx-auto mb-1 h-5 w-5 text-purple" />
+          <p className="text-lg font-bold text-text-primary">
+            {formatNumber(bestScore ?? result.score)}
+          </p>
+          <p className="text-[10px] uppercase tracking-wide text-text-muted">
+            Рекорд
           </p>
         </div>
       </div>

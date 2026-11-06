@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import { gameService } from '@/services/gameService';
+import { useAuthStore } from '@/stores/authStore';
 import { useGameStore } from '@/stores/gameStore';
 import { notify } from '@/stores/notificationStore';
 import { useUserStore } from '@/stores/userStore';
@@ -69,6 +70,12 @@ export function useMiniGame(gameCode: string) {
       );
       updateState(gameCode, response.state);
       if (response.finished && response.result) {
+        const userId = useAuthStore.getState().user?.id;
+        if (userId) {
+          useUserStore
+            .getState()
+            .recordScore(userId, gameCode, response.result.score);
+        }
         setResult(gameCode, response.result);
         invalidate();
       }
