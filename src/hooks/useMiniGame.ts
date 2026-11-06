@@ -75,6 +75,15 @@ export function useMiniGame(gameCode: string) {
           useUserStore
             .getState()
             .recordScore(userId, gameCode, response.result.score);
+          useUserStore.getState().recordHistory(userId, {
+            gameCode,
+            gameName: response.result.game_name,
+            score: response.result.score,
+            coins: response.result.coins_earned,
+            xp: response.result.xp_earned,
+            finishedAt: response.result.completed_at,
+            mode: 'solo',
+          });
         }
         setResult(gameCode, response.result);
         invalidate();

@@ -31,7 +31,7 @@ import { userService } from '@/services/userService';
 import { useMe } from '@/hooks/useMe';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { GAME_META, GAME_ORDER } from '@/constants/games';
-import { useGameStore } from '@/stores/gameStore';
+import { useUserStore } from '@/stores/userStore';
 import { formatDate, formatNumber, formatPercent, titleCase } from '@/utils/format';
 import { leagueForRating } from '@/utils/league';
 
@@ -96,15 +96,10 @@ export default function DashboardPage() {
 
   const username = me?.profile?.display_name ?? me?.user.username ?? 'Player';
   const profile = me?.profile;
-  const sessions = useGameStore((state) => state.sessions);
-  const recentResults = Object.values(sessions)
-    .filter((session) => Boolean(session.result))
-    .sort(
-      (a, b) =>
-        new Date(b.result?.completed_at ?? 0).getTime() -
-        new Date(a.result?.completed_at ?? 0).getTime(),
-    )
-    .slice(0, 3);
+  const localHistory = useUserStore((state) =>
+    userId ? state.history[userId] ?? [] : [],
+  );
+  const recentResults = localHistory.slice(0, 3);
   const league = leagueForRating(myRating?.global_rating);
   const level = profile?.level ?? 1;
   const xp = profile?.xp ?? 0;
@@ -477,33 +472,47 @@ export default function DashboardPage() {
               </p>
             ) : (
               <div className="space-y-2">
-                {recentResults.map((session) => {
-                  const result = session.result;
-                  if (!result) {
-                    return null;
-                  }
-                  const meta = GAME_META[session.gameCode];
+                {recentResults.map((entry) => {
+                  const meta = GAME_META[entry.gameCode];
                   return (
                     <Link
-                      key={`${session.gameCode}-${result.session_id}`}
-                      to={meta?.route ?? '/app/games'}
+                      key={entry.id}
+                      to={meta?.route ?? '/app/competitions'}
                       className="flex items-center justify-between gap-3 rounded-lg border border-border bg-bg-secondary px-3 py-2 transition-colors hover:border-accent-primary/40"
                     >
                       <div className="min-w-0">
-                        <p className="truncate text-xs font-semibold text-text-primary">
-                          {result.game_name}
+                        <p className="flex items-center gap-1.5 truncate text-xs font-semibold text-text-primary">
+                          {entry.gameName}
+                          {entry.mode === 'pvp' && (
+                            <span className="rounded bg-blue/15 px-1 py-0.5 text-[9px] font-bold uppercase text-blue">
+                              PvP
+                            </span>
+                          )}
                         </p>
                         <p className="text-[10px] text-text-muted">
-                          {formatDate(result.completed_at)}
+                          {formatDate(entry.finishedAt)}
                         </p>
                       </div>
                       <div className="flex shrink-0 items-center gap-2 text-xs">
                         <span className="font-bold text-text-primary">
-                          {formatNumber(result.score)}
+                          {formatNumber(entry.score)}
                         </span>
-                        <span className="text-gold">
-                          +{formatNumber(result.coins_earned)}
-                        </span>
+                        {entry.mode === 'pvp' ? (
+                          <span
+                            className={
+                              (entry.ratingDelta ?? 0) >= 0
+                                ? 'text-accent-primary'
+                                : 'text-red'
+                            }
+                          >
+                            ELO {(entry.ratingDelta ?? 0) >= 0 ? '+' : ''}
+                            {entry.ratingDelta ?? 0}
+                          </span>
+                        ) : (
+                          <span className="text-gold">
+                            +{formatNumber(entry.coins)}
+                          </span>
+                        )}
                       </div>
                     </Link>
                   );

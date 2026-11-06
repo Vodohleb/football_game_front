@@ -29,6 +29,7 @@ import { pvpService } from '@/services/pvpService';
 import { notify } from '@/stores/notificationStore';
 import { useAuthStore } from '@/stores/authStore';
 import { usePvpStore } from '@/stores/pvpStore';
+import { useUserStore } from '@/stores/userStore';
 import type { PvpMatchState, PvpRoom } from '@/types/api';
 import { errorMessage } from '@/utils/errors';
 import { formatNumber } from '@/utils/format';
@@ -238,6 +239,25 @@ export default function RoomPage() {
           gameCode: data.game_code,
           players: data.players,
         });
+        const currentUser = useAuthStore.getState().user;
+        if (currentUser) {
+          const myDelta = data.players?.find(
+            (player) => player.username === currentUser.username,
+          )?.rating_delta;
+          useUserStore.getState().recordHistory(currentUser.id, {
+            gameCode: data.game_code,
+            gameName:
+              data.game_code === 'pvp_penalty'
+                ? 'Penalty PvP'
+                : 'Football Quiz PvP',
+            score: data.scores[currentUser.username] ?? 0,
+            coins: 0,
+            xp: 0,
+            finishedAt: new Date().toISOString(),
+            mode: 'pvp',
+            ratingDelta: myDelta,
+          });
+        }
         setSubmitting(false);
         queryClient.invalidateQueries({ queryKey: ['leaderboard'] });
         notify.success(

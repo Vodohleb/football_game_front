@@ -36,6 +36,7 @@ import { ratingService } from '@/services/ratingService';
 import { userService } from '@/services/userService';
 import { useAuthStore } from '@/stores/authStore';
 import { notify } from '@/stores/notificationStore';
+import { useUserStore } from '@/stores/userStore';
 import { useWalletStore } from '@/stores/walletStore';
 import type { UserSettings } from '@/types/api';
 import { cn } from '@/utils/cn';
@@ -65,6 +66,9 @@ export default function ProfilePage() {
   const [settingsDraft, setSettingsDraft] = useState<UserSettings | null>(null);
 
   const userId = me?.user.id;
+  const localHistory = useUserStore((state) =>
+    userId ? state.history[userId] ?? [] : [],
+  );
 
   const statisticsQuery = useQuery({
     queryKey: ['users', userId, 'statistics'],
@@ -541,7 +545,70 @@ export default function ProfilePage() {
       )}
 
       {tab === 'history' && (
+        <section className="rounded-2xl border border-border bg-bg-card p-5">
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="flex items-center gap-2 text-base font-bold text-text-primary">
+              <Gamepad2 className="h-4 w-4 text-accent-primary" />
+              История матчей
+            </h2>
+            <Badge variant="info">{localHistory.length}</Badge>
+          </div>
+          {localHistory.length === 0 ? (
+            <p className="mt-3 text-sm text-text-secondary">
+              Сыграйте мини-игру или PvP-матч, и результат появится здесь.
+            </p>
+          ) : (
+            <div className="mt-3 space-y-2">
+              {localHistory.slice(0, 20).map((entry) => (
+                <div
+                  key={entry.id}
+                  className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-bg-secondary px-3 py-2.5"
+                >
+                  <div className="flex min-w-0 items-center gap-2.5">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent-primary/10 text-accent-primary">
+                      <Gamepad2 className="h-4 w-4" />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="flex flex-wrap items-center gap-1.5 truncate text-sm font-semibold text-text-primary">
+                        {entry.gameName}
+                        {entry.mode === 'pvp' && (
+                          <Badge variant="info">PvP</Badge>
+                        )}
+                      </p>
+                      <p className="text-[11px] text-text-muted">
+                        {formatDateTime(entry.finishedAt)}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm font-bold text-text-primary">
+                      {formatNumber(entry.score)} очков
+                    </p>
+                    <p className="text-[11px] text-text-muted">
+                      {entry.mode === 'pvp'
+                        ? `ELO ${(entry.ratingDelta ?? 0) >= 0 ? '+' : ''}${entry.ratingDelta ?? 0}`
+                        : `+${formatNumber(entry.coins)} монет · +${formatNumber(
+                            entry.xp,
+                          )} XP`}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          <p className="mt-3 text-[11px] text-text-muted">
+            Локальная история матчей браузера. Серверная история игр в текущем
+            API недоступна.
+          </p>
+        </section>
+      )}
+
+      {tab === 'history' && (
         <div className="space-y-3">
+          <h2 className="flex items-center gap-2 text-base font-bold text-text-primary">
+            <Coins className="h-4 w-4 text-gold" />
+            Начисления и списания
+          </h2>
           {historyQuery.isLoading ? (
             <Skeleton className="h-72" />
           ) : historyQuery.isError ? (
