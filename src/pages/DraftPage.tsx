@@ -231,7 +231,13 @@ export default function DraftPage() {
                 style={coords}
               >
                 {pick ? (
-                  <PlayerCard card={pick} size="xs" showStats={false} />
+                  <motion.div
+                    initial={{ scale: 0.6, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ type: 'spring', stiffness: 280, damping: 20 }}
+                  >
+                    <PlayerCard card={pick} size="xs" showStats={false} />
+                  </motion.div>
                 ) : (
                   <CardPlaceholder position={position} className="h-24 sm:h-28" />
                 )}

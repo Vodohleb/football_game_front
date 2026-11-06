@@ -224,7 +224,8 @@ npm run e2e
   выполняет выход.
 - `games.spec.ts` проходит Draft (5 выборов), Guess the Player, Mystery Player,
   Higher or Lower, Tiki-Taka-Toe, создаёт состав и PvP-комнату.
-- `squad.spec.ts` создаёт состав и добавляет карточку на позицию.
+- `squad.spec.ts` создаёт состав, добавляет карточку на позицию, убирает её и
+  меняет схему.
 - `pvp.spec.ts` играет полные PvP-матчи Penalty и Football Quiz между двумя
   браузерными контекстами через WebSocket.
 - `admin.spec.ts` открывает все разделы админ-панели, проверяет ссылки на

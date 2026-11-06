@@ -33,6 +33,10 @@ test('user can create a squad and add a card to it', async ({ page, request }) =
   const collection = (await (
     await request.get(`${API_BASE}/users/me/cards?limit=10`, { headers })
   ).json()) as { data: { card: { position: string; player_name: string } }[] };
+  const formations = (await (
+    await request.get(`${API_BASE}/formations`, { headers })
+  ).json()) as { data: { code: string }[] };
+  const scheme = formations.data.find((item) => item.code !== '4-3-3')?.code;
   const eligiblePositions = new Set([
     'GK',
     'LB',
@@ -82,4 +86,18 @@ test('user can create a squad and add a card to it', async ({ page, request }) =
   await expect(page.getByText('1 из 11 позиций')).toBeVisible({
     timeout: 15_000,
   });
+
+  await page.locator('.pitch button.group').first().click();
+  await expect(page.getByRole('dialog')).toBeVisible();
+  await page.getByRole('button', { name: 'Убрать игрока' }).click();
+  await expect(page.getByText('0 из 11 позиций')).toBeVisible({
+    timeout: 15_000,
+  });
+
+  if (scheme) {
+    await page.getByLabel('Схема').selectOption(scheme);
+    await expect(page.getByText('Схема изменена')).toBeVisible({
+      timeout: 15_000,
+    });
+  }
 });

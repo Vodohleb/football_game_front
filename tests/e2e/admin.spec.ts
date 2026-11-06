@@ -81,6 +81,7 @@ test('admin can open every administration section', async ({ page, request }) =>
   await page.goto('/admin/packs');
   await page.getByRole('button', { name: 'Редактировать' }).first().click();
   await expect(page.getByText('Вероятности', { exact: true })).toBeVisible();
+  await expect(page.getByText('Предпросмотр пака')).toBeVisible();
   await page.keyboard.press('Escape');
 
   await page.goto('/admin/questions');
