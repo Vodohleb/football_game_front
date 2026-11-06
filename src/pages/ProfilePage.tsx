@@ -41,6 +41,7 @@ import type { UserSettings } from '@/types/api';
 import { cn } from '@/utils/cn';
 import { errorMessage } from '@/utils/errors';
 import { formatDate, formatDateTime, formatNumber, titleCase } from '@/utils/format';
+import { leagueForRating } from '@/utils/league';
 
 type TabValue =
   | 'overview'
@@ -173,6 +174,9 @@ export default function ProfilePage() {
                   {profile?.display_name ?? me.user.username}
                 </h1>
                 <Badge variant="success">LVL {profile?.level ?? 1}</Badge>
+                <Badge className={leagueForRating(ratingQuery.data?.global_rating).className}>
+                  {leagueForRating(ratingQuery.data?.global_rating).name}
+                </Badge>
                 {me.user.role !== 'user' && (
                   <Badge variant="gold">{me.user.role}</Badge>
                 )}

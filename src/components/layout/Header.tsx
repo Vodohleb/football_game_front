@@ -6,6 +6,7 @@ import { Logo } from '@/components/layout/Logo';
 import { UserMenu } from '@/components/layout/UserMenu';
 import { CoinBalance } from '@/components/economy/CoinBalance';
 import { RatingBadge } from '@/components/economy/RatingBadge';
+import { Tooltip } from '@/components/ui/Tooltip';
 import { economyService } from '@/services/economyService';
 import { ratingService } from '@/services/ratingService';
 import { useMe } from '@/hooks/useMe';
@@ -43,10 +44,12 @@ export function Header() {
         </div>
 
         <div className="hidden items-center gap-2 lg:flex">
-          <span className="flex items-center gap-1.5 rounded-full border border-accent-primary/20 bg-accent-primary/10 px-3 py-1.5 text-xs font-bold text-accent-primary">
-            <Zap className="h-3.5 w-3.5" />
-            LVL {me?.profile?.level ?? progress?.level ?? '—'}
-          </span>
+          <Tooltip content="Уровень и накопленный опыт">
+            <span className="flex items-center gap-1.5 rounded-full border border-accent-primary/20 bg-accent-primary/10 px-3 py-1.5 text-xs font-bold text-accent-primary">
+              <Zap className="h-3.5 w-3.5" />
+              LVL {me?.profile?.level ?? progress?.level ?? '—'}
+            </span>
+          </Tooltip>
           <span className="hidden text-xs text-text-muted xl:block">
             {formatNumber(me?.profile?.xp ?? progress?.xp)} XP
           </span>

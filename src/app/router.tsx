@@ -128,7 +128,8 @@ export const router = createBrowserRouter([
       {
         element: <AdminLayout />,
         children: [
-          { index: true, element: withSuspense(<AdminDashboardPage />) },
+          { index: true, element: <Navigate to="dashboard" replace /> },
+          { path: 'dashboard', element: withSuspense(<AdminDashboardPage />) },
           { path: 'users', element: withSuspense(<AdminUsersPage />) },
           { path: 'players', element: withSuspense(<AdminPlayersPage />) },
           { path: 'cards', element: withSuspense(<AdminCardsPage />) },
@@ -143,5 +144,6 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  { path: '/404', element: withSuspense(<NotFoundPage />) },
   { path: '*', element: withSuspense(<NotFoundPage />) },
 ]);

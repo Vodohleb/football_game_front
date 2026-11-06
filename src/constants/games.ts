@@ -8,6 +8,7 @@ export interface GameMeta {
   category: Exclude<GameCategory, 'all'>;
   accent: string;
   route: string;
+  difficulty: 'Лёгкая' | 'Средняя' | 'Сложная';
   modes: { value: string; label: string }[];
   defaultMode: string;
 }
@@ -21,6 +22,7 @@ export const GAME_META: Record<string, GameMeta> = {
       'Соберите состав из предложенных карточек: позиция за позицией, выбор за выбором.',
     category: 'squad',
     accent: 'from-emerald-500/30 to-teal-900/10',
+    difficulty: 'Средняя',
     route: '/app/games/draft',
     modes: [
       { value: 'classic', label: 'Classic' },
@@ -36,6 +38,7 @@ export const GAME_META: Record<string, GameMeta> = {
       'Угадайте футболиста по подсказкам. Чем меньше подсказок — тем больше очков.',
     category: 'knowledge',
     accent: 'from-blue-500/30 to-indigo-900/10',
+    difficulty: 'Средняя',
     route: '/app/games/guess-player',
     modes: [
       { value: 'classic', label: 'Classic' },
@@ -51,6 +54,7 @@ export const GAME_META: Record<string, GameMeta> = {
       'Пять ударов, девять секторов и вратарь, который читает ваши мысли.',
     category: 'reaction',
     accent: 'from-rose-500/30 to-red-900/10',
+    difficulty: 'Лёгкая',
     route: '/app/games/penalty',
     modes: [
       { value: 'normal', label: 'Normal' },
@@ -66,6 +70,7 @@ export const GAME_META: Record<string, GameMeta> = {
       'Заполните сетку 3×3 футболистами, подходящими под пересечение условий.',
     category: 'knowledge',
     accent: 'from-purple-500/30 to-fuchsia-900/10',
+    difficulty: 'Сложная',
     route: '/app/games/tiki-taka',
     modes: [
       { value: 'classic', label: 'Classic' },
@@ -81,6 +86,7 @@ export const GAME_META: Record<string, GameMeta> = {
       'Сравните двух футболистов по выбранной характеристике. Ошибка может стоить серии.',
     category: 'knowledge',
     accent: 'from-amber-500/30 to-orange-900/10',
+    difficulty: 'Средняя',
     route: '/app/games/higher-lower',
     modes: [
       { value: 'classic', label: 'Classic' },
@@ -97,6 +103,7 @@ export const GAME_META: Record<string, GameMeta> = {
       'Раскрывайте подсказки одну за другой и назовите загадочного футболиста.',
     category: 'knowledge',
     accent: 'from-cyan-500/30 to-sky-900/10',
+    difficulty: 'Сложная',
     route: '/app/games/mystery-player',
     modes: [
       { value: 'classic', label: 'Classic' },

@@ -65,7 +65,7 @@ export const ADMIN_NAV: NavSection[] = [
   {
     title: 'Обзор',
     items: [
-      { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
+      { to: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     ],
   },
   {

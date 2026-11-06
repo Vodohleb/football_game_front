@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { gameService } from '@/services/gameService';
 import { useGameStore } from '@/stores/gameStore';
 import { notify } from '@/stores/notificationStore';
+import { useUserStore } from '@/stores/userStore';
 import type { GameActionResponse } from '@/types/api';
 import { errorMessage, normalizeError } from '@/utils/errors';
 
@@ -33,6 +34,7 @@ export function useMiniGame(gameCode: string) {
   const startMutation = useMutation({
     mutationFn: (mode?: string) => gameService.start(gameCode, mode),
     onSuccess: (data) => {
+      useUserStore.getState().markGamePlayed(gameCode);
       setSession(gameCode, {
         sessionId: data.session_id,
         gameCode,

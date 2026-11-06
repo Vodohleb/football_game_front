@@ -7,6 +7,7 @@ import { authService } from '@/services/authService';
 import { useAuthStore } from '@/stores/authStore';
 import { useGameStore } from '@/stores/gameStore';
 import { usePvpStore } from '@/stores/pvpStore';
+import { useUserStore } from '@/stores/userStore';
 import { useWalletStore } from '@/stores/walletStore';
 
 export function UserMenu() {
@@ -38,7 +39,8 @@ export function UserMenu() {
     useWalletStore.getState().reset();
     useGameStore.getState().clearAll();
     usePvpStore.getState().clear();
-    navigate('/');
+    useUserStore.getState().reset();
+    navigate('/login', { replace: true });
   };
 
   const username = user?.username ?? 'Player';
@@ -49,6 +51,8 @@ export function UserMenu() {
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
+        aria-label="Меню профиля"
+        aria-expanded={open}
         className="flex items-center gap-2 rounded-xl border border-border bg-bg-card py-1.5 pl-1.5 pr-2 transition-colors hover:border-[#3a4b5e]"
       >
         <Avatar name={username} size="sm" />

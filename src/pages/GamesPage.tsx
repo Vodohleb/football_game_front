@@ -19,11 +19,13 @@ import {
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { gameService } from '@/services/gameService';
 import { ratingService } from '@/services/ratingService';
+import { useUserStore } from '@/stores/userStore';
 import { formatNumber } from '@/utils/format';
 
 export default function GamesPage() {
   useDocumentTitle('Мини-игры');
   const [category, setCategory] = useState<GameCategory>('all');
+  const recentGameCodes = useUserStore((state) => state.recentGameCodes);
 
   const { data: games, isLoading } = useQuery({
     queryKey: ['games'],
@@ -130,8 +132,11 @@ export default function GamesPage() {
                           : 'Знания'}
                     </Badge>
                     <span className="text-[10px] text-text-muted">
-                      {meta.modes.length} режим(а)
+                      {meta.difficulty} · {meta.modes.length} режима
                     </span>
+                    {recentGameCodes.includes(code) && (
+                      <Badge variant="success">Недавно</Badge>
+                    )}
                   </div>
                 </div>
                 <h2 className="mt-4 font-display text-lg font-bold text-text-primary">

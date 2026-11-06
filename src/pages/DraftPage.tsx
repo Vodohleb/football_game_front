@@ -1,16 +1,18 @@
 import { motion } from 'framer-motion';
-import { CheckCircle2, Layers3, Trophy } from 'lucide-react';
+import { CheckCircle2, Layers3, Share2, Trophy } from 'lucide-react';
 import { useState } from 'react';
 
 import { GameResultPanel } from '@/components/games/GameResultPanel';
 import { GameShell } from '@/components/games/GameShell';
 import { GameStartCard } from '@/components/games/GameStartCard';
 import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
 import { CardPlaceholder, PlayerCard } from '@/components/cards/PlayerCard';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { GAME_META } from '@/constants/games';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useMiniGame } from '@/hooks/useMiniGame';
+import { notify } from '@/stores/notificationStore';
 import type { DraftState } from '@/types/api';
 import { formatNumber } from '@/utils/format';
 
@@ -105,6 +107,30 @@ export default function DraftPage() {
               {resultPicks.map((pick) => (
                 <PlayerCard key={pick.card_id} card={pick} size="xs" showStats={false} />
               ))}
+            </div>
+            <div className="flex justify-end">
+              <Button
+                size="sm"
+                variant="ghost"
+                leftIcon={<Share2 className="h-3.5 w-3.5" />}
+                onClick={async () => {
+                  const text = `Мой драфт в Football Arena: ${formatNumber(
+                    result.score,
+                  )} очков, средний OVR ${average.toFixed(1)}.`;
+                  try {
+                    if (navigator.share) {
+                      await navigator.share({ title: 'Football Arena', text });
+                    } else {
+                      await navigator.clipboard.writeText(text);
+                      notify.success('Результат скопирован');
+                    }
+                  } catch {
+                    notify.info('Результат драфта', text);
+                  }
+                }}
+              >
+                Поделиться результатом
+              </Button>
             </div>
           </div>
         </GameResultPanel>

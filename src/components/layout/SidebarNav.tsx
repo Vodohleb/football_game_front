@@ -7,6 +7,7 @@ import { authService } from '@/services/authService';
 import { useAuthStore } from '@/stores/authStore';
 import { useGameStore } from '@/stores/gameStore';
 import { usePvpStore } from '@/stores/pvpStore';
+import { useUserStore } from '@/stores/userStore';
 import { useWalletStore } from '@/stores/walletStore';
 import { cn } from '@/utils/cn';
 
@@ -31,12 +32,13 @@ export function SidebarNav({
     } catch {
       // The local session is cleared regardless of the server response.
     }
+    onNavigate?.();
     useAuthStore.getState().clear();
     useWalletStore.getState().reset();
     useGameStore.getState().clearAll();
     usePvpStore.getState().clear();
-    onNavigate?.();
-    navigate('/');
+    useUserStore.getState().reset();
+    navigate('/login', { replace: true });
   };
 
   return (

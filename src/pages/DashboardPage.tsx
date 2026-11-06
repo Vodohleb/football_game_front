@@ -31,7 +31,9 @@ import { userService } from '@/services/userService';
 import { useMe } from '@/hooks/useMe';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { GAME_META, GAME_ORDER } from '@/constants/games';
+import { useGameStore } from '@/stores/gameStore';
 import { formatDate, formatNumber, formatPercent, titleCase } from '@/utils/format';
+import { leagueForRating } from '@/utils/league';
 
 const QUICK_LINKS = [
   {
@@ -94,6 +96,16 @@ export default function DashboardPage() {
 
   const username = me?.profile?.display_name ?? me?.user.username ?? 'Player';
   const profile = me?.profile;
+  const sessions = useGameStore((state) => state.sessions);
+  const recentResults = Object.values(sessions)
+    .filter((session) => Boolean(session.result))
+    .sort(
+      (a, b) =>
+        new Date(b.result?.completed_at ?? 0).getTime() -
+        new Date(a.result?.completed_at ?? 0).getTime(),
+    )
+    .slice(0, 3);
+  const league = leagueForRating(myRating?.global_rating);
   const level = profile?.level ?? 1;
   const xp = profile?.xp ?? 0;
   const nextLevelXp = Math.max(100, level * 250);
@@ -149,6 +161,7 @@ export default function DashboardPage() {
                   {username}
                 </h2>
                 <Badge variant="success">LVL {level}</Badge>
+                <Badge className={league.className}>{league.name}</Badge>
                 {me?.user.role !== 'user' && (
                   <Badge variant="gold">{me?.user.role}</Badge>
                 )}
@@ -441,6 +454,62 @@ export default function DashboardPage() {
                 </span>
               </div>
             </div>
+          </section>
+
+          <section className="rounded-2xl border border-border bg-bg-card p-5">
+            <div className="mb-4 flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <Gamepad2 className="h-4.5 w-4.5 text-accent-primary" />
+                <h2 className="text-base font-bold text-text-primary">
+                  Последние результаты
+                </h2>
+              </div>
+              <Link
+                to="/app/games"
+                className="text-xs font-semibold text-accent-primary hover:underline"
+              >
+                Игры
+              </Link>
+            </div>
+            {recentResults.length === 0 ? (
+              <p className="text-sm text-text-secondary">
+                Завершите первую игру, чтобы увидеть результат здесь.
+              </p>
+            ) : (
+              <div className="space-y-2">
+                {recentResults.map((session) => {
+                  const result = session.result;
+                  if (!result) {
+                    return null;
+                  }
+                  const meta = GAME_META[session.gameCode];
+                  return (
+                    <Link
+                      key={`${session.gameCode}-${result.session_id}`}
+                      to={meta?.route ?? '/app/games'}
+                      className="flex items-center justify-between gap-3 rounded-lg border border-border bg-bg-secondary px-3 py-2 transition-colors hover:border-accent-primary/40"
+                    >
+                      <div className="min-w-0">
+                        <p className="truncate text-xs font-semibold text-text-primary">
+                          {result.game_name}
+                        </p>
+                        <p className="text-[10px] text-text-muted">
+                          {formatDate(result.completed_at)}
+                        </p>
+                      </div>
+                      <div className="flex shrink-0 items-center gap-2 text-xs">
+                        <span className="font-bold text-text-primary">
+                          {formatNumber(result.score)}
+                        </span>
+                        <span className="text-gold">
+                          +{formatNumber(result.coins_earned)}
+                        </span>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
           </section>
 
           <section className="rounded-2xl border border-border bg-bg-card p-5">

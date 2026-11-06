@@ -18,6 +18,7 @@ import { useAuthStore } from '@/stores/authStore';
 import type { LeaderboardEntry, WeeklyLeaderboardEntry } from '@/types/api';
 import { cn } from '@/utils/cn';
 import { formatNumber } from '@/utils/format';
+import { leagueForRating } from '@/utils/league';
 
 type TabValue = 'global' | 'games' | 'weekly' | 'season';
 
@@ -111,6 +112,8 @@ export default function LeaderboardPage() {
             </p>
             <p className="flex items-center gap-2 text-[10px] text-text-muted">
               <span>LVL {entry.level}</span>
+              <span>·</span>
+              <span>{leagueForRating(entry.rating).name}</span>
               <span>·</span>
               <span>{entry.matches_played} матчей</span>
             </p>
