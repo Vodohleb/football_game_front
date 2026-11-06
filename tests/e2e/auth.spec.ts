@@ -50,4 +50,22 @@ test('user can register, logout and login again', async ({
   await expect(
     page.getByRole('heading', { name: `Привет, ${username}` }),
   ).toBeVisible({ timeout: 20_000 });
+
+  const persisted = await page.evaluate(() =>
+    localStorage.getItem('football-arena-auth'),
+  );
+  expect(persisted).toBeTruthy();
+  const parsed = JSON.parse(persisted as string) as {
+    state: { accessToken: string };
+  };
+  parsed.state.accessToken = 'expired-access-token';
+  await page.evaluate(
+    (value) => localStorage.setItem('football-arena-auth', value),
+    JSON.stringify(parsed),
+  );
+  await page.reload();
+  await expect(page).toHaveURL(/\/app\/dashboard$/, { timeout: 20_000 });
+  await expect(
+    page.getByRole('heading', { name: `Привет, ${username}` }),
+  ).toBeVisible({ timeout: 20_000 });
 });
