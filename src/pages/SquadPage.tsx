@@ -18,7 +18,7 @@ import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { cardService } from '@/services/cardService';
 import { squadService } from '@/services/squadService';
 import { notify } from '@/stores/notificationStore';
-import type { Formation, Squad } from '@/types/api';
+import type { Formation } from '@/types/api';
 import { errorMessage } from '@/utils/errors';
 import { formatNumber } from '@/utils/format';
 

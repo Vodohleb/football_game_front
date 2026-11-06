@@ -35,8 +35,8 @@ const schema = z
       .regex(/[A-Za-z]/, 'Пароль должен содержать букву')
       .regex(/\d/, 'Пароль должен содержать цифру'),
     confirmPassword: z.string().min(1, 'Повторите пароль'),
-    terms: z.literal(true, {
-      error: 'Необходимо принять условия',
+    terms: z.boolean().refine((value) => value, {
+      message: 'Необходимо принять условия',
     }),
   })
   .refine((values) => values.password === values.confirmPassword, {
@@ -97,7 +97,12 @@ export default function RegisterPage() {
   const strength = passwordStrength(password ?? '');
 
   const mutation = useMutation({
-    mutationFn: authService.register,
+    mutationFn: (values: FormValues) =>
+      authService.register({
+        email: values.email,
+        username: values.username,
+        password: values.password,
+      }),
     onSuccess: (data) => {
       setAuth(data.user, data.tokens.access_token);
       rememberLogin(true);

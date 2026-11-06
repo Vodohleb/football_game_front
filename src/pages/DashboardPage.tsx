@@ -23,7 +23,6 @@ import { Button } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { CoinBalance } from '@/components/economy/CoinBalance';
 import { RatingBadge } from '@/components/economy/RatingBadge';
 import { achievementService } from '@/services/achievementService';
 import { questService } from '@/services/questService';

@@ -43,7 +43,8 @@ export default function LoginPage() {
   });
 
   const mutation = useMutation({
-    mutationFn: authService.login,
+    mutationFn: (values: FormValues) =>
+      authService.login({ email: values.email, password: values.password }),
     onSuccess: (data, variables) => {
       setAuth(data.user, data.tokens.access_token);
       rememberLogin(variables.remember);

@@ -136,9 +136,7 @@ export async function deleteData<T>(
   return response.data.data;
 }
 
-export function buildQuery(
-  params: Record<string, string | number | boolean | null | undefined>,
-): string {
+export function buildQuery(params: object): string {
   const search = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {
     if (value !== null && value !== undefined && value !== '') {

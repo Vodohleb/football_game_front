@@ -45,8 +45,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               'h-11 w-full rounded-xl border border-border bg-bg-secondary px-3.5 text-sm text-text-primary placeholder:text-text-muted',
               'transition-colors outline-none focus:border-accent-primary/70 focus:ring-2 focus:ring-accent-primary/15',
               'disabled:cursor-not-allowed disabled:opacity-60',
-              leftIcon && 'pl-10',
-              rightElement && 'pr-11',
+              Boolean(leftIcon) && 'pl-10',
+              Boolean(rightElement) && 'pr-11',
               error && 'border-red/70 focus:border-red focus:ring-red/15',
               className,
             )}
