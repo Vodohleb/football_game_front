@@ -1,0 +1,204 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-bg-primary: #0b0f14;
+  --color-bg-secondary: #111821;
+  --color-bg-card: #18222d;
+  --color-bg-hover: #202d3a;
+  --color-text-primary: #f5f7fa;
+  --color-text-secondary: #9ba8b7;
+  --color-text-muted: #687586;
+  --color-accent-primary: #42d392;
+  --color-accent-secondary: #20a974;
+  --color-gold: #f4c45e;
+  --color-blue: #4b9cf5;
+  --color-purple: #a77bfa;
+  --color-red: #f06464;
+  --color-border: #283544;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Manrope', 'Inter', system-ui, sans-serif;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(1100px 500px at 12% -10%, rgba(66, 211, 146, 0.12), transparent 60%),
+      radial-gradient(900px 500px at 90% 0%, rgba(75, 156, 245, 0.1), transparent 55%),
+      var(--color-bg-primary);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: rgba(66, 211, 146, 0.3);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-bg-primary);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3a4b5e;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    font: inherit;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    background: linear-gradient(160deg, rgba(24, 34, 45, 0.9), rgba(17, 24, 33, 0.86));
+    border: 1px solid rgba(40, 53, 68, 0.9);
+    backdrop-filter: blur(14px);
+  }
+
+  .surface {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+  }
+
+  .surface-hover {
+    transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .surface-hover:hover {
+    background: var(--color-bg-hover);
+    border-color: #3a4b5e;
+  }
+
+  .text-gradient {
+    background: linear-gradient(120deg, #f5f7fa 10%, #42d392 55%, #4b9cf5 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .grid-pattern {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+
+  .pitch {
+    background:
+      radial-gradient(120% 80% at 50% 0%, rgba(66, 211, 146, 0.1), transparent 60%),
+      repeating-linear-gradient(
+        0deg,
+        rgba(32, 169, 116, 0.14) 0,
+        rgba(32, 169, 116, 0.14) 48px,
+        rgba(20, 120, 82, 0.14) 48px,
+        rgba(20, 120, 82, 0.14) 96px
+      ),
+      linear-gradient(180deg, #0d2018, #0a1712);
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .safe-bottom {
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.5rem);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(66, 211, 146, 0.45);
+  }
+  70% {
+    box-shadow: 0 0 0 16px rgba(66, 211, 146, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(66, 211, 146, 0);
+  }
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 1.8s infinite;
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float {
+  animation: float-y 4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.08) 50%, transparent 80%);
+  animation: shimmer 1.6s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
