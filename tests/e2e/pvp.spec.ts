@@ -107,6 +107,9 @@ test('two players can play a full PvP penalty match', async ({
   await expect(
     pageB.getByRole('heading', { name: 'Матч завершён' }),
   ).toBeVisible({ timeout: 15_000 });
+  await expect(
+    pageA.getByText(/ELO [+-]?\d+/).first(),
+  ).toBeVisible();
 
   await expect(
     pageA.getByRole('link', { name: 'Открыть профиль' }).first(),

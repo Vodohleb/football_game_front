@@ -108,6 +108,7 @@ export default function RoomPage() {
   const myUsername = user?.username ?? '';
   const setLastRoom = usePvpStore((state) => state.setLastRoom);
   const setLastResult = usePvpStore((state) => state.setLastResult);
+  const lastResult = usePvpStore((state) => state.lastResult);
   const [liveRoom, setLiveRoom] = useState<PvpRoom | null>(null);
   const [connection, setConnection] = useState<ConnectionState>('connecting');
   const [submitting, setSubmitting] = useState(false);
@@ -211,6 +212,12 @@ export default function RoomPage() {
           scores: Record<string, number>;
           winner: string | null;
           game_code: string;
+          players?: {
+            username: string;
+            score?: number;
+            result?: string;
+            rating_delta: number;
+          }[];
         };
         setLiveRoom((previous) => {
           if (!previous) return previous;
@@ -229,6 +236,7 @@ export default function RoomPage() {
           scores: data.scores,
           winner: data.winner,
           gameCode: data.game_code,
+          players: data.players,
         });
         setSubmitting(false);
         queryClient.invalidateQueries({ queryKey: ['leaderboard'] });
@@ -765,6 +773,27 @@ export default function RoomPage() {
                       Победитель
                     </Badge>
                   )}
+                  {(() => {
+                    const ratingDelta = lastResult?.players?.find(
+                      (result) => result.username === player.username,
+                    )?.rating_delta;
+                    if (ratingDelta === undefined) {
+                      return null;
+                    }
+                    return (
+                      <motion.p
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.25 }}
+                        className={`mt-1 text-xs font-bold ${
+                          ratingDelta >= 0 ? 'text-accent-primary' : 'text-red'
+                        }`}
+                      >
+                        ELO {ratingDelta >= 0 ? '+' : ''}
+                        {ratingDelta}
+                      </motion.p>
+                    );
+                  })()}
                   {player.user_id !== user?.id && (
                     <Link
                       to={`/app/users/${player.user_id}`}
