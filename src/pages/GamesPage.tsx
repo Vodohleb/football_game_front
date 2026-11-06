@@ -127,6 +127,15 @@ export default function GamesPage() {
                 transition={{ delay: index * 0.04 }}
                 className={`group relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br ${meta.accent} p-5`}
               >
+                <div className="relative -mx-5 -mt-5 mb-4 h-28 overflow-hidden border-b border-white/10">
+                  <img
+                    src={`/images/games/${code}.svg`}
+                    alt=""
+                    loading="lazy"
+                    className="h-full w-full object-cover opacity-90"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-bg-card/90 via-bg-card/15 to-transparent" />
+                </div>
                 <div className="flex items-start justify-between gap-3">
                   <GameIcon code={code} size="md" />
                   <div className="flex flex-col items-end gap-1">

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 240" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#12233f"/>
+      <stop offset="1" stop-color="#0b0f14"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4b9cf5" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#4b9cf5" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="240" fill="url(#bg)"/>
+  <circle cx="320" cy="120" r="150" fill="url(#glow)" opacity="0.3"/>
+  <g fill="#9ba8b7" opacity="0.55">
+    <circle cx="320" cy="92" r="42"/>
+    <path d="M232 196c8-44 42-68 88-68s80 24 88 68z"/>
+  </g>
+  <g stroke="#4b9cf5" stroke-width="3" fill="none" opacity="0.7">
+    <circle cx="320" cy="120" r="96"/>
+    <path d="M224 120h192M320 24v192" opacity="0.25"/>
+  </g>
+  <text x="470" y="126" font-family="Manrope, Inter, sans-serif" font-size="96" font-weight="800" fill="#4b9cf5" opacity="0.9">?</text>
+  <text x="104" y="140" font-family="Manrope, Inter, sans-serif" font-size="96" font-weight="800" fill="#4b9cf5" opacity="0.25">?</text>
+</svg>

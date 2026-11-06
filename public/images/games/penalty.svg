@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 240" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#26131a"/>
+      <stop offset="1" stop-color="#0b0f14"/>
+    </linearGradient>
+    <radialGradient id="spot" cx="0.5" cy="0.2" r="0.8">
+      <stop offset="0" stop-color="#f06464" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#f06464" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="640" height="240" fill="url(#bg)"/>
+  <rect width="640" height="240" fill="url(#spot)"/>
+  <g stroke="#ffffff" stroke-width="3" opacity="0.65" fill="none">
+    <path d="M170 190V54h300v136"/>
+    <path d="M190 54v136M210 54v136M230 54v136M250 54v136M270 54v136M290 54v136M310 54v136M330 54v136M350 54v136M370 54v136M390 54v136M410 54v136M430 54v136M450 54v136"/>
+    <path d="M170 72h300M170 92h300M170 112h300M170 132h300M170 152h300M170 172h300" opacity="0.5"/>
+  </g>
+  <g fill="#9ba8b7" opacity="0.65">
+    <circle cx="320" cy="124" r="16"/>
+    <path d="M292 188c2-28 12-44 28-44s26 16 28 44z"/>
+  </g>
+  <circle cx="486" cy="192" r="16" fill="#f5f7fa"/>
+  <path d="M478 182l16 10-6 12h-14l-6-12z" fill="#0b0f14" opacity="0.8"/>
+  <path d="M470 210h32" stroke="#0b0f14" stroke-width="3" opacity="0.35"/>
+  <path d="M486 150c-26-18-48-12-62 4" stroke="#f06464" stroke-width="3" stroke-dasharray="6 6" fill="none" opacity="0.6"/>
+</svg>

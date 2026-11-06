@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 240" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f2a20"/>
+      <stop offset="1" stop-color="#0b0f14"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#42d392"/>
+      <stop offset="1" stop-color="#126e4c"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="240" fill="url(#bg)"/>
+  <g opacity="0.18" stroke="#ffffff">
+    <path d="M0 40h640M0 80h640M0 120h640M0 160h640M0 200h640"/>
+    <path d="M80 0v240M160 0v240M240 0v240M320 0v240M400 0v240M480 0v240M560 0v240"/>
+  </g>
+  <rect x="70" y="28" width="500" height="184" rx="10" fill="none" stroke="#ffffff" opacity="0.22"/>
+  <circle cx="320" cy="120" r="42" fill="none" stroke="#ffffff" opacity="0.18"/>
+  <g transform="rotate(-8 320 120)">
+    <rect x="238" y="70" width="66" height="92" rx="8" fill="#18222d" stroke="#42d392" stroke-width="2" opacity="0.55"/>
+    <rect x="294" y="60" width="72" height="100" rx="8" fill="url(#card)" opacity="0.9"/>
+    <rect x="356" y="72" width="64" height="88" rx="8" fill="#18222d" stroke="#42d392" stroke-width="2" opacity="0.55"/>
+    <circle cx="330" cy="86" r="10" fill="#0b0f14" opacity="0.45"/>
+    <rect x="312" y="106" width="36" height="5" rx="2.5" fill="#0b0f14" opacity="0.45"/>
+    <rect x="312" y="118" width="26" height="5" rx="2.5" fill="#0b0f14" opacity="0.3"/>
+  </g>
+</svg>

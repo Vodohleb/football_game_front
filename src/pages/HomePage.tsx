@@ -289,8 +289,17 @@ export default function HomePage() {
                   >
                     <Link
                       to={token ? meta.route : '/register'}
-                      className={`group flex h-full flex-col rounded-2xl border border-border bg-gradient-to-br ${meta.accent} p-5 transition-transform hover:-translate-y-1`}
+                      className={`group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-gradient-to-br ${meta.accent} p-5 transition-transform hover:-translate-y-1`}
                     >
+                      <div className="relative -mx-5 -mt-5 mb-4 h-28 overflow-hidden border-b border-white/10">
+                        <img
+                          src={`/images/games/${code}.svg`}
+                          alt=""
+                          loading="lazy"
+                          className="h-full w-full object-cover opacity-90"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-bg-card/90 via-bg-card/15 to-transparent" />
+                      </div>
                       <div className="flex items-center justify-between">
                         <GameIcon code={code} size="md" />
                         <Target className="h-4 w-4 text-text-muted transition-colors group-hover:text-accent-primary" />
